@@ -31,9 +31,9 @@ COPY "Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" "Services/Orderi
 COPY "Services/Ordering/Ordering.FunctionalTests/Ordering.FunctionalTests.csproj" "Services/Ordering/Ordering.FunctionalTests/Ordering.FunctionalTests.csproj"
 COPY "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" "Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj"
 COPY "Services/Ordering/Ordering.SignalrHub/Ordering.SignalrHub.csproj" "Services/Ordering/Ordering.SignalrHub/Ordering.SignalrHub.csproj"
-COPY "Services/Coupon/Coupon.API/Coupon.API.csproj" "Services/Coupon/Coupon.API/Coupon.API.csproj"
 COPY "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj" "Services/Ordering/Ordering.UnitTests/Ordering.UnitTests.csproj"
 COPY "Services/Payment/Payment.API/Payment.API.csproj" "Services/Payment/Payment.API/Payment.API.csproj"
+COPY "Services/Coupon/Coupon.API/Coupon.API.csproj" "Services/Coupon/Coupon.API/Coupon.API.csproj"
 COPY "Services/Webhooks/Webhooks.API/Webhooks.API.csproj" "Services/Webhooks/Webhooks.API/Webhooks.API.csproj"
 COPY "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj" "Tests/Services/Application.FunctionalTests/Application.FunctionalTests.csproj"
 COPY "Web/WebhookClient/WebhookClient.csproj" "Web/WebhookClient/WebhookClient.csproj"
@@ -48,12 +48,18 @@ COPY "NuGet.config" "NuGet.config"
 RUN dotnet restore "eShopOnContainers-ServicesAndWebApps.sln"
 
 COPY . .
-WORKDIR /src/ApiGateways/Web.Bff.Shopping/aggregator
+WORKDIR /src/Services/Coupon/Coupon.API
 RUN dotnet publish --no-restore -c Release -o /app
+
+FROM build as unittest
+WORKDIR /src/Services/Coupon/Coupon.UnitTests
+
+FROM build as functionaltest
+WORKDIR /src/Services/Coupon/Coupon.FunctionalTests
 
 FROM build AS publish
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
-ENTRYPOINT ["dotnet", "Web.Shopping.HttpAggregator.dll"]
+ENTRYPOINT ["dotnet", "Coupon.API.dll"]

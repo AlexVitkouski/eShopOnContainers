@@ -5,7 +5,7 @@ Log.Logger = CreateSerilogLogger(configuration);
 try
 {
     Log.Information("Configuring web host ({ApplicationContext})...", Program.AppName);
-    var host = BuildWebHost(configuration, args);
+    IWebHost host = BuildWebHost(configuration, args);
 
     Log.Information("Starting web host ({ApplicationContext})...", Program.AppName);
     host.Run();

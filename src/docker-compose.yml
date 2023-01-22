@@ -69,6 +69,15 @@ services:
       dockerfile: Services/Payment/Payment.API/Dockerfile
     depends_on:
       - rabbitmq
+      
+  coupon-api:
+    image: ${REGISTRY:-eshop}/coupon.api:${PLATFORM:-linux}-${TAG:-latest}
+    build:
+      context: .
+      dockerfile: Services/Coupon/Coupon.API/Dockerfile
+    depends_on:
+      - nosqldata
+      - rabbitmq      
 
   webhooks-api:
     image: ${REGISTRY:-eshop}/webhooks.api:${PLATFORM:-linux}-${TAG:-latest}
