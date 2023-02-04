@@ -10,5 +10,9 @@
         Task UpdateCouponConsumedByCodeAsync(string code, int orderId);
 
         Task UpdateCouponReleasedByOrderIdAsync(int orderId);
+
+        Task<Loyalty> FindLoyaltyByCodeAsync(int buyerId);
+
+        Task SaveLoyalty(Loyalty loyalty);
     }
 }

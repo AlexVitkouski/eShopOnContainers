@@ -33,6 +33,7 @@ namespace Coupon.API
 
             services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>, OrderStatusChangedToAwaitingCouponValidationIntegrationEventHandler>();
             services.AddTransient<IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>, OrderStatusChangedToCancelledIntegrationEventHandler>();
+            services.AddTransient<IIntegrationEventHandler<BuyerPointsUpdatedIntegrationEvent>, BuyerPointsUpdatedIntegrationEventHandler>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -83,6 +84,7 @@ namespace Coupon.API
 
             eventBus.Subscribe<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToAwaitingCouponValidationIntegrationEvent>>();
             eventBus.Subscribe<OrderStatusChangedToCancelledIntegrationEvent, IIntegrationEventHandler<OrderStatusChangedToCancelledIntegrationEvent>>();
+            eventBus.Subscribe<BuyerPointsUpdatedIntegrationEvent, IIntegrationEventHandler<BuyerPointsUpdatedIntegrationEvent>>();
         }
     }
 }

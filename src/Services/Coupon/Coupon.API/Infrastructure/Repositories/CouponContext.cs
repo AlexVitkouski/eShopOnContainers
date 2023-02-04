@@ -21,5 +21,9 @@
         }
 
         public IMongoCollection<Coupon> Coupons => _database.GetCollection<Coupon>("CouponCollection");
+        
+        public IMongoCollection<Loyalty> Loyalties => _database.GetCollection<Loyalty>("LoyaltyCollection");
+        
+        public IMongoCollection<LoyaltyTier> LoyaltyTiers => _database.GetCollection<LoyaltyTier>("LoyaltyTierCollection");
     }
 }

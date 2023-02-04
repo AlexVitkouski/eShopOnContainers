@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Coupon.API.Dtos;
 using Coupon.API.Infrastructure.Repositories;
+using Coupon.API.Services;
+using Coupon.API.Services.Contract;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus;
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Abstractions;
@@ -52,7 +54,8 @@ namespace Coupon.API.Extensions
                 })
                 .AddTransient<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>()
                 .AddTransient<CouponContext>()
-                .AddTransient<IMapper<CouponDto, Coupon>, Mapper>();
+                .AddTransient<IMapper<CouponDto, Coupon>, Mapper>()
+                .AddTransient<ILoyaltyService, LoyaltyService>();
 
             return services;
         }

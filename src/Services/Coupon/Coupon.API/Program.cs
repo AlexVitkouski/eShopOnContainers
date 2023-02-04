@@ -11,7 +11,11 @@ try
     Log.Information("Configuring web host ({ApplicationContext})...", Program.AppName);
     CreateHostBuilder(args)
         .Build()
-        //.SeedDatabaseStrategy<CouponContext>(context => new CouponSeed().SeedAsync(context).Wait())
+        .SeedDatabaseStrategy<CouponContext>(context =>
+        {
+            new CouponSeed().SeedAsync(context).Wait();
+            new DbInitService().InitTiers(context).Wait();
+        })
         .SubscribersIntegrationEvents()
         .Run();
     

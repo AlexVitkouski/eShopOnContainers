@@ -38,5 +38,22 @@
             var filter = Builders<Coupon>.Filter.Eq("Code", code);
             return await _couponContext.Coupons.Find(filter).FirstOrDefaultAsync();
         }
-    }
+
+        public async Task<Loyalty> FindLoyaltyByCodeAsync(int buyerId)
+        {
+            var filter = Builders<Loyalty>.Filter.Eq("BuyerId", buyerId);
+
+            return await _couponContext.Loyalties.Find(filter).FirstOrDefaultAsync();
+        }
+
+        public async Task SaveLoyalty(Loyalty loyalty)
+        {
+            var filter = Builders<Loyalty>.Filter.Eq("BuyerId", loyalty.BuyerId);
+            var update = Builders<Loyalty>.Update
+                .Set(l => l.Points, loyalty.Points)
+                .Set(l => l.TotalAmount, loyalty.TotalAmount);
+
+            await _couponContext.Loyalties.UpdateOneAsync(filter, update, new UpdateOptions {IsUpsert = true});
+        }
+}
 }
