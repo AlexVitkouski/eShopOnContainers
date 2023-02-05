@@ -27,7 +27,7 @@ public class SetStockConfirmedOrderStatusCommandHandler : IRequestHandler<SetSto
             return false;
         }
 
-        orderToUpdate.SetStockConfirmedStatus();
+        orderToUpdate.ProcessStockConfirmed();
         return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
     }
 }

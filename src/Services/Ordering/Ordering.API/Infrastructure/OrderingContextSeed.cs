@@ -130,8 +130,9 @@ public class OrderingContextSeed
         return new List<OrderStatus>()
         {
             OrderStatus.Submitted,
-            OrderStatus.AwaitingValidation,
-            OrderStatus.StockConfirmed,
+            OrderStatus.AwaitingStockValidation,
+            OrderStatus.AwaitingCouponValidation,
+            OrderStatus.Validated,
             OrderStatus.Paid,
             OrderStatus.Shipped,
             OrderStatus.Cancelled

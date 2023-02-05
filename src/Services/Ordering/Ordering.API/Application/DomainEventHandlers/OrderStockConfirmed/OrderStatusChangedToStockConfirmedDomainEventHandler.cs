@@ -1,14 +1,14 @@
 ﻿namespace Microsoft.eShopOnContainers.Services.Ordering.API.Application.DomainEventHandlers.OrderStockConfirmed;
 
-public class OrderStatusChangedToStockConfirmedDomainEventHandler
-                : INotificationHandler<OrderStatusChangedToStockConfirmedDomainEvent>
+public class OrderStatusChangedToValidatedDomainEventHandler
+                : INotificationHandler<OrderStatusChangedToValidatedDomainEvent>
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IBuyerRepository _buyerRepository;
     private readonly ILoggerFactory _logger;
     private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
 
-    public OrderStatusChangedToStockConfirmedDomainEventHandler(
+    public OrderStatusChangedToValidatedDomainEventHandler(
         IOrderRepository orderRepository,
         IBuyerRepository buyerRepository,
         ILoggerFactory logger,
@@ -20,16 +20,16 @@ public class OrderStatusChangedToStockConfirmedDomainEventHandler
         _orderingIntegrationEventService = orderingIntegrationEventService;
     }
 
-    public async Task Handle(OrderStatusChangedToStockConfirmedDomainEvent orderStatusChangedToStockConfirmedDomainEvent, CancellationToken cancellationToken)
+    public async Task Handle(OrderStatusChangedToValidatedDomainEvent OrderStatusChangedToValidatedDomainEvent, CancellationToken cancellationToken)
     {
-        _logger.CreateLogger<OrderStatusChangedToStockConfirmedDomainEventHandler>()
+        _logger.CreateLogger<OrderStatusChangedToValidatedDomainEventHandler>()
             .LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status} ({Id})",
-                orderStatusChangedToStockConfirmedDomainEvent.OrderId, nameof(OrderStatus.StockConfirmed), OrderStatus.StockConfirmed.Id);
+                OrderStatusChangedToValidatedDomainEvent.OrderId, nameof(OrderStatus.Validated), OrderStatus.Validated.Id);
 
-        var order = await _orderRepository.GetAsync(orderStatusChangedToStockConfirmedDomainEvent.OrderId);
+        var order = await _orderRepository.GetAsync(OrderStatusChangedToValidatedDomainEvent.OrderId);
         var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
-        var orderStatusChangedToStockConfirmedIntegrationEvent = new OrderStatusChangedToStockConfirmedIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
+        var orderStatusChangedToStockConfirmedIntegrationEvent = new OrderStatusChangedToValidatedIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name);
         await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStatusChangedToStockConfirmedIntegrationEvent);
     }
 }

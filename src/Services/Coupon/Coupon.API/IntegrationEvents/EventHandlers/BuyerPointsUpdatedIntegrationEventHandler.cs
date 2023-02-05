@@ -7,7 +7,6 @@ using Serilog.Context;
 
 namespace Coupon.API.IntegrationEvents.EventHandlers
 {
-
     public class BuyerPointsUpdatedIntegrationEventHandler :
         IIntegrationEventHandler<BuyerPointsUpdatedIntegrationEvent>
     {
