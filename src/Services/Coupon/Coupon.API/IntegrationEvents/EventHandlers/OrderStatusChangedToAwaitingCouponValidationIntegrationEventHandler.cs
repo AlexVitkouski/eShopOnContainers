@@ -37,13 +37,13 @@ namespace Coupon.API.IntegrationEvents.EventHandlers
 
         private async Task<IntegrationEvent> ProcessIntegrationEventAsync(OrderStatusChangedToAwaitingCouponValidationIntegrationEvent integrationEvent)
         {
-            var coupon = await _couponRepository.FindCouponByCodeAsync(integrationEvent.Code);
+            Infrastructure.Models.Coupon? coupon = await _couponRepository.FindCouponByCodeAsync(integrationEvent.Code);
 
             Log.Information("----- Coupon \"{CouponCode}\": {@Coupon}", integrationEvent.Code, coupon);
 
-            if (coupon == null || coupon.Consumed)
+            if (IsOrderValid(coupon, integrationEvent.BuyerId, integrationEvent.Points))
             {
-                return new OrderCouponRejectedIntegrationEvent(integrationEvent.OrderId, coupon.Code);
+                return new OrderCouponRejectedIntegrationEvent(integrationEvent.OrderId, coupon?.Code ?? "n/a");
             }
 
             Log.Information("Consumed coupon: {DiscountCode}", integrationEvent.Code);
@@ -51,6 +51,28 @@ namespace Coupon.API.IntegrationEvents.EventHandlers
             await _couponRepository.UpdateCouponConsumedByCodeAsync(integrationEvent.Code, integrationEvent.OrderId);
 
             return new OrderCouponConfirmedIntegrationEvent(integrationEvent.OrderId, coupon.Discount);
+        }
+
+        private bool IsOrderValid(Infrastructure.Models.Coupon? coupon, int buyerId, double points)
+        {
+            return IsCouponValid(coupon) && ArePointsValid(buyerId, points);
+        }
+
+        private bool IsCouponValid(Infrastructure.Models.Coupon? coupon)
+        {
+            return coupon == null || coupon.Consumed;
+        }
+
+        private bool ArePointsValid(int buyerId, double points)
+        {
+            if (points == 0)
+            {
+                return true;
+            }
+
+            var loyalty = _couponRepository.FindLoyaltyByForBuyerAsync(buyerId);
+
+            return loyalty?.Result != null && loyalty.Result.Points >= points;
         }
     }
 }

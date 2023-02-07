@@ -19,13 +19,13 @@ namespace Coupon.API.Infrastructure
                     },
                     new LoyaltyTier()
                     {
-                        Number = 1,
+                        Number = 2,
                         Amount = 200,
                         Discount = 2
                     },
                     new LoyaltyTier()
                     {
-                        Number = 1,
+                        Number = 3,
                         Amount = 300,
                         Discount = 3
                     }

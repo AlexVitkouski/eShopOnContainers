@@ -37,4 +37,20 @@ public class CouponController : ControllerBase
 
         return couponDto;
     }
+
+    [HttpGet("buyerId")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<double>> GetLoyaltyDicsountAsync(int buyerId)
+    {
+        var loyaltyTier = await _couponRepository.FindLoyaltyTierForBuyerAsync(buyerId);
+
+        if (loyaltyTier == null)
+        {
+            return NotFound();
+        }
+
+        return loyaltyTier.Discount;
+    }
 }

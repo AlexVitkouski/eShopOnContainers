@@ -49,7 +49,7 @@ public class OrderPaymentSucceededIntegrationEventHandler :
                 UnitCount = i.GetUnits()
             }).ToList();
             
-            IntegrationEvent buyerPointsUpdatedIntegrationEvent = new BuyerPointsUpdatedIntegrationEvent(@event.OrderId, 2, items);
+            IntegrationEvent buyerPointsUpdatedIntegrationEvent = new BuyerPointsUpdatedIntegrationEvent(@event.OrderId, order.GetBuyerId.Value, items);
 
             _eventBus.Publish(buyerPointsUpdatedIntegrationEvent);
         }

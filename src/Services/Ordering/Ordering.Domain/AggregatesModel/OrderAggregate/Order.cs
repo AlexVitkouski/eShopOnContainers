@@ -28,6 +28,8 @@ public class Order
     
     public bool? DiscountConfirmed { get; private set; }
 
+    public decimal Points { get; private set; }
+
 
     // Draft orders have this set to true. Currently we don't check anywhere the draft status of an Order, but we could do it if needed
     private bool _isDraft;
@@ -55,7 +57,7 @@ public class Order
     }
 
     public Order(string userId, string userName, Address address, int cardTypeId, string cardNumber, string cardSecurityNumber,
-        string cardHolderName, DateTime cardExpiration, string discountCode, decimal? discount, int? buyerId = null, int? paymentMethodId = null) : this()
+        string cardHolderName, DateTime cardExpiration, string discountCode, decimal? discount, decimal points, int? buyerId = null, int? paymentMethodId = null) : this()
 
     {
         _buyerId = buyerId;
@@ -65,6 +67,7 @@ public class Order
         Address = address;
         DiscountCode = discountCode;
         Discount = discountCode == null ? null : discount;
+        Points = points;
 
 
         // Add the OrderStarterDomainEvent to the domain events collection 

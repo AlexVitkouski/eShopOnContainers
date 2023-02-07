@@ -9,7 +9,7 @@ namespace Coupon.API.Services
     {
         private readonly ICouponRepository _couponRepository;
 
-        const decimal PointPercent = 0.07m;
+        const double PointPercent = 0.07;
 
         public LoyaltyService(ICouponRepository couponRepository)
         {
@@ -18,7 +18,7 @@ namespace Coupon.API.Services
 
         public async Task SaveLoyalty(int buyerId, List<OrderItem> orderItems)
         {
-            var oldLoyalty = await _couponRepository.FindLoyaltyByCodeAsync(buyerId);
+            var oldLoyalty = await _couponRepository.FindLoyaltyByForBuyerAsync(buyerId);
             
             var orderAmount = GetOrderAmount(orderItems);
             var orderPoints = GetOrderPoints(orderAmount);
@@ -33,12 +33,12 @@ namespace Coupon.API.Services
             await _couponRepository.SaveLoyalty(newLoyalty);
         }
 
-        private decimal GetOrderAmount(List<OrderItem> orderItems)
+        private double GetOrderAmount(List<OrderItem> orderItems)
         {
-            return orderItems.Sum(i => i.UnitPrice * i.UnitCount);
+            return orderItems.Sum(i => (double)(i.UnitPrice * i.UnitCount));
         }
 
-        private int GetOrderPoints(decimal orderAmount)
+        private int GetOrderPoints(double orderAmount)
         {
             return (int)Math.Round(orderAmount*PointPercent);
         }

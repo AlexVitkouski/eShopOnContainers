@@ -39,7 +39,7 @@
             return await _couponContext.Coupons.Find(filter).FirstOrDefaultAsync();
         }
 
-        public async Task<Loyalty> FindLoyaltyByCodeAsync(int buyerId)
+        public async Task<Loyalty> FindLoyaltyByForBuyerAsync(int buyerId)
         {
             var filter = Builders<Loyalty>.Filter.Eq("BuyerId", buyerId);
 
@@ -53,7 +53,17 @@
                 .Set(l => l.Points, loyalty.Points)
                 .Set(l => l.TotalAmount, loyalty.TotalAmount);
 
-            await _couponContext.Loyalties.UpdateOneAsync(filter, update, new UpdateOptions {IsUpsert = true});
+            await _couponContext.Loyalties.UpdateOneAsync(filter, update, new UpdateOptions { IsUpsert = true });
         }
-}
+
+        public async Task<LoyaltyTier> FindLoyaltyTierForBuyerAsync(int buyerId)
+        {
+            var buyerLoyalty = await FindLoyaltyByForBuyerAsync(buyerId);
+
+            var filter = Builders<LoyaltyTier>.Filter.Lte("Amount", buyerLoyalty.TotalAmount);
+            var sortDef = Builders<LoyaltyTier>.Sort.Descending("Amount");
+
+            return await _couponContext.LoyaltyTiers.Find(filter).Sort(sortDef).FirstOrDefaultAsync();
+        }
+    }
 }

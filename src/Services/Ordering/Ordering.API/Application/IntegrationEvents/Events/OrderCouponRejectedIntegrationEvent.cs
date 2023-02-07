@@ -3,9 +3,11 @@
 using Microsoft.eShopOnContainers.BuildingBlocks.EventBus.Events;
 using Newtonsoft.Json;
 
-public record OrderCouponConfirmedIntegrationEvent : IntegrationEvent
+public record OrderCouponRejectedIntegrationEvent : IntegrationEvent
 {
-    [JsonProperty] public int OrderId { get; set; }
+    [JsonProperty]
+    public int OrderId { get; private set; }
 
-    [JsonProperty] public int Discount { get; set; }
+    [JsonProperty]
+    public string Code { get; private set; }
 }

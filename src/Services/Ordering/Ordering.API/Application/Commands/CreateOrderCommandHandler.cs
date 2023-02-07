@@ -41,7 +41,7 @@ public class CreateOrderCommandHandler
             message.CardSecurityNumber, message.CardHolderName, message.CardExpiration,
 
             //todo: set parameters from the CreateOrderCommand
-            "DISC-10", 10);
+            "DISC-10", 10, 0);
 
         foreach (var item in message.OrderItems)
         {

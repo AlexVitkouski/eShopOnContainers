@@ -38,7 +38,9 @@ namespace Ordering.API.Application.DomainEventHandlers.OrderCoupon
             var order = await _orderRepository.GetAsync(domainEvent.OrderId);
             var buyer = await _buyerRepository.FindByIdAsync(order.GetBuyerId.Value.ToString());
 
-            var integrationEvent = new OrderStatusChangedToAwaitingCouponValidationIntegrationEvent(order.Id, order.OrderStatus.Name, buyer.Name, order.DiscountCode);
+            var integrationEvent =
+                new OrderStatusChangedToAwaitingCouponValidationIntegrationEvent(order.Id, order.OrderStatus.Name,
+                    buyer.Name, order.DiscountCode, (double)order.Points, order.GetBuyerId.Value);
 
             await _orderingIntegrationEventService.AddAndSaveEventAsync(integrationEvent);
         }

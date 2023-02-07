@@ -8,16 +8,22 @@ public record OrderStatusChangedToAwaitingCouponValidationIntegrationEvent : Int
 
     public string OrderStatus { get; }
 
+    public int BuyerId { get; set; }
+
     public string BuyerName { get; }
 
-    public string Code { get; set; }
+    public string Code { get; }
+    
+    public double Points { get; }
 
-    public OrderStatusChangedToAwaitingCouponValidationIntegrationEvent(int orderId, string orderStatus, string buyerName, string code)
+    public OrderStatusChangedToAwaitingCouponValidationIntegrationEvent(int orderId, string orderStatus, string buyerName, string code, double points, int buyerId)
     {
         OrderId = orderId;
         OrderStatus = orderStatus;
         BuyerName = buyerName;
         Code = code;
+        Points = points;
+        BuyerId = buyerId;
     }
 }
 

@@ -60,7 +60,7 @@ public class NewOrderRequestHandlerTest
 
     private Order FakeOrder()
     {
-        return new Order("1", "fakeName", new Address("street", "city", "state", "country", "zipcode"), 1, "12", "111", "fakeName", DateTime.Now.AddYears(1), "todo:", null);
+        return new Order("1", "fakeName", new Address("street", "city", "state", "country", "zipcode"), 1, "12", "111", "fakeName", DateTime.Now.AddYears(1), "todo:", null, 0);
     }
 
     private CreateOrderCommand FakeOrderRequestWithBuyer(Dictionary<string, object> args = null)

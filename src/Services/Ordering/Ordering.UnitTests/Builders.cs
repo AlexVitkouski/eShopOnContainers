@@ -25,7 +25,7 @@ public class OrderBuilder
             cardSecurityNumber: "123",
             cardHolderName: "name",
             cardExpiration: DateTime.UtcNow,
-            "todo:", null);
+            "todo:", null, 0);
     }
 
     public OrderBuilder AddOne(
